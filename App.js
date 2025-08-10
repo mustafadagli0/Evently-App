@@ -4,6 +4,7 @@ import {useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from './firebaseConfig';
+import Loading from './src/components/Loading';
 
 import { 
   StyleSheet,
@@ -23,10 +24,14 @@ import {
 export default function App() {
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");    
+    const [isloading, setIsLoading] = useState("");
 
     const handleLogin = () => {
         signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => { console.log("Login successful"); })
+            .then((userCredential) => { console.log("Login successful");
+                setIsLoading(true);
+
+             })
             .catch((error) => { console.error("Login failed", error); });
     };
 
@@ -82,10 +87,15 @@ export default function App() {
               console.log(email);
               console.log(password);
               handleLogin();
+               
             }}
             >
               <Text style={styles.textButton}>LOGİN</Text>
             </Pressable>
+           {isloading ? <Loading style={{position:'absolute'}}/> : null}
+
+
+
 
           </View>      
     </KeyboardAvoidingView>
